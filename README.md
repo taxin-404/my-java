@@ -68,6 +68,26 @@ If TMCBeans is flaky on Wayland/Hyprland, `tmc-cli` is a terminal client for the
 
 ---
 
+## Troubleshooting: huge or "broken pixel" text in TMCBeans
+
+On Hyprland/Wayland, TMCBeans (Java/XWayland) can open with fonts/icons scaled ~2x,
+and/or text rendered with garbled "broken pixels". Both come from the session
+environment leaking `GDK_SCALE=2` (OpenJDK treats it as a 2x display) and JDK's
+XRender/subpixel text pipeline misbehaving under XWayland.
+
+Run the bundled fixer script:
+
+```bash
+./fix-tmcbeans-scaling.sh
+```
+
+It forces `GDK_SCALE=1`, writes a user desktop launcher with
+`-Dsun.java2d.xrender=false -Dawt.useSystemAAFontSettings=on -Dswing.aatext=true`,
+resets TMCBeans' stale window layout, and reapplies the env to the current session.
+Idempotent — safe to re-run. Fully close and reopen TMCBeans afterwards.
+
+---
+
 ## Certificate note
 
 - Completing each course (Java Programming I & II) gets you a **free certificate**, generated at https://www.mooc.fi/en/profile/completions.
