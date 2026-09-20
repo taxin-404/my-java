@@ -15,6 +15,7 @@
 #   - Point systemd --user session env at GDK_SCALE=1 (no re-login required)
 #   - Create a user-level tmcbeans.desktop launching TMCBeans with:
 #       -Dsun.java2d.xrender=false -Dawt.useSystemAAFontSettings=on -Dswing.aatext=true
+#   - Hide the snap's duplicate TMCBeans desktop entry (NoDisplay=true)
 #   - Reset TMCBeans' stale window layout (saved against a half-size screen)
 #
 # Idempotent: safe to run repeatedly.
@@ -65,7 +66,21 @@ StartupWMClass=NetBeans IDE 11.1
 EOF
 echo "    wrote $DESKTOP_FILE"
 
-echo "==> 4. Reset stale TMCBeans window layout (half-size screen snapshot)"
+echo "==> 4. Hide the snap's duplicate TMCBeans desktop entry"
+
+SNAP_DESKTOP="/var/lib/snapd/desktop/applications/tmcbeans_tmcbeans.desktop"
+if [[ -f "$SNAP_DESKTOP" ]] && ! grep -q '^NoDisplay=.*true' "$SNAP_DESKTOP"; then
+    if cp "$SNAP_DESKTOP" "$SNAP_DESKTOP.bak" 2>/dev/null && sed -i '1a NoDisplay=true' "$SNAP_DESKTOP" 2>/dev/null; then
+        echo "    hid $SNAP_DESKTOP (backup at $SNAP_DESKTOP.bak; may reappear on 'snap refresh')"
+    else
+        echo "    !! could not edit $SNAP_DESKTOP (needs root) - run manually:"
+        echo "       sudo sed -i '1a NoDisplay=true' $SNAP_DESKTOP"
+    fi
+else
+    echo "    already hidden or not found - nothing to do"
+fi
+
+echo "==> 5. Reset stale TMCBeans window layout (half-size screen snapshot)"
 
 if [[ -d "$NB_USERDIR" ]]; then
     timestamp=$(date +%s)
