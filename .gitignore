@@ -1,0 +1,6 @@
+# Maven / NetBeans build artifacts
+build/
+dist/
+target/
+nbproject/private/
+*.class
