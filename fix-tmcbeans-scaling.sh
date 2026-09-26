@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# fix-tmcbeans-scaling.sh
+# fix-tmcbeans-scaling.sh   (ORIGINAL - superseded by the rewritten ~/gg.sh, kept as a backup)
 #
 # Fixes "upscaled" / "broken pixel" text in TMCBeans (NetBeans 11.1 + OpenJDK 11)
 # on Hyprland (Omarchy). Two root causes, one script:
@@ -70,7 +70,7 @@ echo "==> 4. Hide the snap's duplicate TMCBeans desktop entry"
 
 SNAP_DESKTOP="/var/lib/snapd/desktop/applications/tmcbeans_tmcbeans.desktop"
 if [[ -f "$SNAP_DESKTOP" ]] && ! grep -q '^NoDisplay=.*true' "$SNAP_DESKTOP"; then
-    if cp "$SNAP_DESKTOP" "$SNAP_DESKTOP.bak" 2>/dev/null && sed -i '1a NoDisplay=true' "$SNAP_DESKTOP" 2>/dev/null; then
+    if sudo cp "$SNAP_DESKTOP" "$SNAP_DESKTOP.bak" 2>/dev/null && sudo sed -i '1a NoDisplay=true' "$SNAP_DESKTOP" 2>/dev/null; then
         echo "    hid $SNAP_DESKTOP (backup at $SNAP_DESKTOP.bak; may reappear on 'snap refresh')"
     else
         echo "    !! could not edit $SNAP_DESKTOP (needs root) - run manually:"
