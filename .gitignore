@@ -6,3 +6,4 @@ nbproject/private/
 *.class
 *.xml
 *.yml
+*.toml
