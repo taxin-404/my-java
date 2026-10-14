@@ -4,3 +4,5 @@ dist/
 target/
 nbproject/private/
 *.class
+*.xml
+*.yml
