@@ -1,9 +1,17 @@
-# Maven / NetBeans build artifacts
+# Build and target directories
+target/
 build/
 dist/
-target/
 nbproject/private/
+
+# Test directories and files
+**/test/
+*Test.java
+
+# Compiled class files
 *.class
+
+# Configuration files
 *.xml
 *.yml
 *.toml
